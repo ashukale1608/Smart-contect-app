@@ -1,4 +1,4 @@
-package smartcontect.smartcontect.moled;
+package smartcontect.example.smartcontect.moled;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

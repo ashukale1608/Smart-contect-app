@@ -1,8 +1,8 @@
-package smartcontect.smartcontect.dav;
+package smartcontect.example.smartcontect.dav;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import smartcontect.smartcontect.moled.UserData;
+import smartcontect.example.smartcontect.moled.UserData;
 
 public interface UserDataRepo extends JpaRepository < UserData , Integer >{
 

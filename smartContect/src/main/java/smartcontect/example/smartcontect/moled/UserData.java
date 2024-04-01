@@ -1,4 +1,4 @@
-package smartcontect.smartcontect.moled;
+package smartcontect.example.smartcontect.moled;
 
 import java.util.List;
 import jakarta.persistence.CascadeType;

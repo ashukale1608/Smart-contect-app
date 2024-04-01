@@ -1,19 +1,15 @@
-package smartcontect.smartcontect.service;
+package smartcontect.example.smartcontect.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
-
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import jakarta.validation.Valid;
-import smartcontect.smartcontect.dav.UserDataRepo;
-import smartcontect.smartcontect.moled.ContectData;
-import smartcontect.smartcontect.moled.UserData;
+import smartcontect.example.smartcontect.dav.UserDataRepo;
+import smartcontect.example.smartcontect.moled.ContectData;
+import smartcontect.example.smartcontect.moled.UserData;
 
 @Service
 public class UserDataService {
