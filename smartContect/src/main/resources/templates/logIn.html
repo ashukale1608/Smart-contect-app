@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="baseCode::layout(~{::section})">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp</title>
+</head>
+
+<body>
+    <section class="signUpPage">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 text-center  ">
+                <div class="bg-white m-3 py-4">
+                    <h1 class="pb-5">Log In Here</h1>                    
+                    <form action="allContectHome" th:object="${userData}">
+                        <!-- <div class="mb-3">
+                            <b><label for="" class="ml-5">Name : </label></b>
+                            <input 
+                                type="text" 
+                                name="name" 
+                                th:value="${userData.name}"
+                                class="ml-2"
+                                th:classappend="${#fields.hasErrors('name') ? 'is-invalid' : ''}">
+                            <div th:each="e : ${#fields.errors('name')}" th:text="${e}" class="invalid-feedback">
+                            </div>
+                        </div>
+                        <br> -->
+                        
+                        <div class="mb-3">
+                            <b><label for="" class="ml-5">Email : </label></b>
+                            <input 
+                                type="email" 
+                                name="email"
+                                class="ml-3"
+                                th:value="${userData.email}"
+                                th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}">
+                            <div th:each="e : ${#fields.errors('email')}" th:text="${e}" class="invalid-feedback">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="mb-3">
+                            <b><label for="" class="ml-5">Password : </label></b>
+                            <input 
+                            type="password" 
+                            name="password"
+                            class="mx-auto"
+                            th:value="${userData.password}"
+                            th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}">
+                            <div th:each="e : ${#fields.errors('password')}" th:text="${e}" class="invalid-feedback"></div>
+                        </div>
+                        <div>
+                            <button class="btn btn-info mt-4">Log In</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+    </section>
+</body>
+
+</html>
