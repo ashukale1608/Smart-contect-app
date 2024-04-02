@@ -22,33 +22,40 @@ public class UserDataController {
     @Autowired
     UserDataService userDataService;
    
-    @GetMapping("/home")
+    // go to home page this is first page
+    @GetMapping("/")
     public String homePage(){
         return "home";
     }
 
+    // this is log in page 
     @GetMapping("/logIn")
     public String logInPage(Model model){
         model.addAttribute("userData", new UserData());
         return "logIn";
     }
 
+    // this ia sign up page
     @GetMapping("/signUp")
     public String signUpPage( Model model){
         model.addAttribute("userData",new UserData());
         return "signUp";
     }
 
-    @PostMapping("/toAddContact")
+
+    // add contect after login and sign up
+    @PostMapping("/contact")
     public String addContact(Model model ,@Valid UserData userData , BindingResult result){
         // model.addAttribute("contactData", new ContectData()); 
-        return userDataService.createNewUser(userData,result);               
+        // return userDataService.createNewUser(userData,result);  
+        return userDataService.contactHome(userData,result);
     }
     
 
     @GetMapping("/allContectHome")
     public String allContect(Model model , @Valid UserData newUserDataToAddContect , BindingResult result){
         model.addAttribute("contactData", new ContectData()); 
+        System.out.println("in allContectHome");
         return userDataService.showAllContect(newUserDataToAddContect,result);
     }
 

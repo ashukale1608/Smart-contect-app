@@ -24,7 +24,7 @@
                         th:value="${contactData != null ? contactData.name : ''}"
                         th:classappend="${contactData != null && #fields.hasErrors('name') ? 'is-invalid' : ''}"
                     >
-                    <div th:each="e : ${#fields.errors('name')}" class="invalid-feedback" th:text="${e}"></div>
+                    <!-- <div th:each="e : ${#fields.errors('name')}" class="invalid-feedback" th:text="${e}"></div> -->
                     
                         <br>
                         <br>

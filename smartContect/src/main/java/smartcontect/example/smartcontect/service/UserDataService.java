@@ -20,24 +20,31 @@ public class UserDataService {
 
     public String createNewUser(@Valid UserData userData, BindingResult result) {
 
-        UserData newUserData = userDataRepo.findByEmail(userData.getEmail());
-        if (result.hasErrors()) {
-            return "signUp";
-        } else if (newUserData == null) {
+        UserData newUserDataByEmail = userDataRepo.findByEmail(userData.getEmail());
+        if (newUserDataByEmail == null) {
             userDataRepo.save(userData);
             return "toAddContact";
-        } else if (newUserData.getName().equals(userData.getName())
-                && newUserData.getEmail().equals(userData.getEmail())
-                && newUserData.getPassword().equals(userData.getPassword())) {
-            return "toAddContact";
         } else {
-            return "signUp";
+            String loginUserPassword = newUserDataByEmail.getPassword();
+
+            if (result.hasErrors()) {
+                return "signUp";
+            } else if (loginUserPassword != userData.getPassword()) {
+                userDataRepo.save(userData);
+                return "toAddContact";
+            } else if (newUserDataByEmail.getName().equals(userData.getName())
+                    && newUserDataByEmail.getEmail().equals(userData.getEmail())
+                    && newUserDataByEmail.getPassword().equals(userData.getPassword())) {
+                return "toAddContact";
+            } else {
+                return "signUp";
+            }
         }
     }
 
     public String showAllContect(@Valid UserData newUserDataToAddContect, BindingResult result) {
         UserData newUserData = userDataRepo.findByEmail(newUserDataToAddContect.getEmail());
-        if (newUserDataToAddContect.getEmail().isEmpty() || newUserDataToAddContect.getPassword().isEmpty()) {
+        if (newUserDataToAddContect.getPassword().isEmpty() || newUserDataToAddContect.getEmail().isEmpty()) {
             return "logIn";
         } else if (newUserData == null) {
             return "signUp";
@@ -56,16 +63,16 @@ public class UserDataService {
     }
 
     // public ResponseEntity<String> addData(UserData userData) {
-    //     ContectData contectData = new ContectData();
-    //     contectData.setUserData(userData);
+    // ContectData contectData = new ContectData();
+    // contectData.setUserData(userData);
 
-    //     userData.setContectData(Collections.singletonList(contectData));
-    //     System.out.println(userDataRepo.save(userData));
-    //     return new ResponseEntity<>("success", HttpStatus.OK);
+    // userData.setContectData(Collections.singletonList(contectData));
+    // System.out.println(userDataRepo.save(userData));
+    // return new ResponseEntity<>("success", HttpStatus.OK);
     // }
 
     public String addContectData(ContectData contectData, BindingResult result) {
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             System.out.println("in error");
             System.out.println(result);
             return "toAddContact";
@@ -74,6 +81,11 @@ public class UserDataService {
         newUserDataToAddContect.setContectData(Collections.singletonList(contectData));
         // userDataRepo.save(newUserDataToAddContect);
         return "toAddContact";
+    }
+
+    public String contactHome(@Valid UserData userData, BindingResult result) {
+        
+        return "contactHomePage";
     }
 
 }
