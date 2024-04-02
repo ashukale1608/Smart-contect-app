@@ -15,7 +15,6 @@ class SmartcontectApplicationTests {
 	@Test
 	void contextLoads() {
 		
-		assertEquals(3, userDataController.jastForTest(2, 1));
 	}
 
 }

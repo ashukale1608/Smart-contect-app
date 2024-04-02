@@ -1,6 +1,6 @@
 package smartcontect.example.smartcontect.service;
 
-import java.util.Collections;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import jakarta.validation.Valid;
 import smartcontect.example.smartcontect.dav.UserDataRepo;
-import smartcontect.example.smartcontect.moled.ContectData;
 import smartcontect.example.smartcontect.moled.UserData;
 
 @Service
@@ -19,42 +18,48 @@ public class UserDataService {
     UserData newUserDataToAddContect;
 
     public String createNewUser(@Valid UserData userData, BindingResult result) {
-
         UserData newUserDataByEmail = userDataRepo.findByEmail(userData.getEmail());
         if (newUserDataByEmail == null) {
             userDataRepo.save(userData);
-            return "toAddContact";
+            this.newUserDataToAddContect = userData;
+            return "showAllContact";
         } else {
             String loginUserPassword = newUserDataByEmail.getPassword();
-
             if (result.hasErrors()) {
                 return "signUp";
             } else if (loginUserPassword != userData.getPassword()) {
                 userDataRepo.save(userData);
-                return "toAddContact";
+                this.newUserDataToAddContect = userData;
+                return "showAllContact";
             } else if (newUserDataByEmail.getName().equals(userData.getName())
                     && newUserDataByEmail.getEmail().equals(userData.getEmail())
                     && newUserDataByEmail.getPassword().equals(userData.getPassword())) {
-                return "toAddContact";
+                this.newUserDataToAddContect = newUserDataByEmail ;
+                return "showAllContact";
             } else {
                 return "signUp";
             }
         }
     }
 
-    public String showAllContect(@Valid UserData newUserDataToAddContect, BindingResult result) {
-        UserData newUserData = userDataRepo.findByEmail(newUserDataToAddContect.getEmail());
-        if (newUserDataToAddContect.getPassword().isEmpty() || newUserDataToAddContect.getEmail().isEmpty()) {
+    public String logInUser(@Valid UserData userData, BindingResult result) {
+        UserData newUserDataByEmail = userDataRepo.findByEmail(userData.getEmail());
+       
+        if (userData.getPassword().isEmpty() || userData.getEmail().isEmpty()){
             return "logIn";
-        } else if (newUserData == null) {
+        }else if (newUserDataByEmail == null) {
             return "signUp";
-        } else if (newUserData.getEmail().equals(newUserDataToAddContect.getEmail())
-                && newUserData.getPassword().equals(newUserDataToAddContect.getPassword())) {
-            this.newUserDataToAddContect = newUserData;
-            return "toAddContact";
-        } else {
-            return "signUp";
-        }
+        } 
+        if (result.hasErrors()) {
+            if (userData.getName() == null && userData.getEmail() != null && userData.getPassword() != null) {                
+                if (newUserDataByEmail.getEmail().equals(userData.getEmail())
+                        && newUserDataByEmail.getPassword().equals(userData.getPassword())) {
+                    this.newUserDataToAddContect = newUserDataByEmail ;
+                    return "showAllContact";
+                } 
+            }
+        } 
+        return "logIn";      
     }
 
     public ResponseEntity<?> deletedAllData() {
@@ -62,30 +67,9 @@ public class UserDataService {
         return new ResponseEntity<>("successfully", HttpStatus.OK);
     }
 
-    // public ResponseEntity<String> addData(UserData userData) {
-    // ContectData contectData = new ContectData();
-    // contectData.setUserData(userData);
-
-    // userData.setContectData(Collections.singletonList(contectData));
-    // System.out.println(userDataRepo.save(userData));
-    // return new ResponseEntity<>("success", HttpStatus.OK);
-    // }
-
-    public String addContectData(ContectData contectData, BindingResult result) {
-        if (result.hasErrors()) {
-            System.out.println("in error");
-            System.out.println(result);
-            return "toAddContact";
-        }
-        contectData.setUserData(newUserDataToAddContect);
-        newUserDataToAddContect.setContectData(Collections.singletonList(contectData));
-        // userDataRepo.save(newUserDataToAddContect);
-        return "toAddContact";
+    public ResponseEntity<Optional<UserData>> deletedUserDataById(int id) {
+        Optional<UserData> userDataToDeleted = userDataRepo.findById(id);
+        userDataRepo.deleteById(id);
+        return new ResponseEntity<>(userDataToDeleted , HttpStatus.OK);
     }
-
-    public String contactHome(@Valid UserData userData, BindingResult result) {
-        
-        return "contactHomePage";
-    }
-
 }
