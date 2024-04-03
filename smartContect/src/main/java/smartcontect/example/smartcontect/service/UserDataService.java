@@ -15,13 +15,21 @@ public class UserDataService {
     @Autowired
     UserDataRepo userDataRepo;
 
-    UserData newUserDataToAddContect;
+    private static UserData newUserDataToAddContect;
+
+    public static UserData getNewUserDataToAddContect() {
+        return newUserDataToAddContect;
+    }
+
+    public void setNewUserDataToAddContect(UserData newUserDataToAddContect) {
+        UserDataService.newUserDataToAddContect = newUserDataToAddContect;
+    }
 
     public String createNewUser(@Valid UserData userData, BindingResult result) {
         UserData newUserDataByEmail = userDataRepo.findByEmail(userData.getEmail());
         if (newUserDataByEmail == null) {
             userDataRepo.save(userData);
-            this.newUserDataToAddContect = userData;
+            setNewUserDataToAddContect(userData);
             return "showAllContact";
         } else {
             String loginUserPassword = newUserDataByEmail.getPassword();
@@ -29,12 +37,12 @@ public class UserDataService {
                 return "signUp";
             } else if (loginUserPassword != userData.getPassword()) {
                 userDataRepo.save(userData);
-                this.newUserDataToAddContect = userData;
+                setNewUserDataToAddContect(userData);
                 return "showAllContact";
             } else if (newUserDataByEmail.getName().equals(userData.getName())
                     && newUserDataByEmail.getEmail().equals(userData.getEmail())
                     && newUserDataByEmail.getPassword().equals(userData.getPassword())) {
-                this.newUserDataToAddContect = newUserDataByEmail ;
+                setNewUserDataToAddContect(newUserDataByEmail);
                 return "showAllContact";
             } else {
                 return "signUp";
@@ -44,22 +52,23 @@ public class UserDataService {
 
     public String logInUser(@Valid UserData userData, BindingResult result) {
         UserData newUserDataByEmail = userDataRepo.findByEmail(userData.getEmail());
-       
-        if (userData.getPassword().isEmpty() || userData.getEmail().isEmpty()){
+
+        if (userData.getPassword().isEmpty() || userData.getEmail().isEmpty()) {
             return "logIn";
-        }else if (newUserDataByEmail == null) {
+        } else if (newUserDataByEmail == null) {
             return "signUp";
-        } 
+        }
         if (result.hasErrors()) {
-            if (userData.getName() == null && userData.getEmail() != null && userData.getPassword() != null) {                
+            if (userData.getName() == null && userData.getEmail() != null && userData.getPassword() != null) {
                 if (newUserDataByEmail.getEmail().equals(userData.getEmail())
                         && newUserDataByEmail.getPassword().equals(userData.getPassword())) {
-                    this.newUserDataToAddContect = newUserDataByEmail ;
+                    setNewUserDataToAddContect(newUserDataByEmail);
+                    System.out.println(getNewUserDataToAddContect());
                     return "showAllContact";
-                } 
+                }
             }
-        } 
-        return "logIn";      
+        }
+        return "logIn";
     }
 
     public ResponseEntity<?> deletedAllData() {
@@ -70,6 +79,6 @@ public class UserDataService {
     public ResponseEntity<Optional<UserData>> deletedUserDataById(int id) {
         Optional<UserData> userDataToDeleted = userDataRepo.findById(id);
         userDataRepo.deleteById(id);
-        return new ResponseEntity<>(userDataToDeleted , HttpStatus.OK);
+        return new ResponseEntity<>(userDataToDeleted, HttpStatus.OK);
     }
 }

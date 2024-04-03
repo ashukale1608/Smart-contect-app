@@ -40,7 +40,14 @@
     </div>
     <div class="row">
         <div class="col-3">
-            <h1>first</h1>
+            <form action="/contact/getAddContectPage" method="get" class="p-3">
+                <h3>Add New Contact</h3>
+                <button class="btn btn-info">Add New</button>
+            </form>
+            <form action="/contact/showAllContact" class="p-3">
+                <h3>Show All Contact</h3>
+                <button class="btn btn-info">Show</button>
+            </form>
         </div>
         <div class="col-9">
             <div th:replace="${content}">
