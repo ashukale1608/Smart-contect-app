@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 import smartcontect.example.smartcontect.moled.ContectData;
 import smartcontect.example.smartcontect.service.ContactDataService;
-import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
